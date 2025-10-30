@@ -96,26 +96,26 @@ erDiagram
 ```mermaid
 graph TB
     subgraph "User Management"
-        U[👤 USERS<br/>id: INT PK<br/>username: VARCHAR(15) UK<br/>password: VARCHAR(255)<br/>role: ENUM('admin','user')<br/>created_at: TIMESTAMP<br/>updated_at: TIMESTAMP]
+        U["👤 USERS<br/>id: INT PK<br/>username: VARCHAR(15) UK<br/>password: VARCHAR(255)<br/>role: ENUM('admin','user')<br/>created_at: TIMESTAMP<br/>updated_at: TIMESTAMP"]
     end
     
     subgraph "Todo Management"
-        T[📝 TODOS<br/>id: INT PK<br/>text: TEXT<br/>completed: BOOLEAN<br/>user_id: INT FK<br/>created_at: TIMESTAMP<br/>updated_at: TIMESTAMP<br/>completed_at: TIMESTAMP]
+        T["📝 TODOS<br/>id: INT PK<br/>text: TEXT<br/>completed: BOOLEAN<br/>user_id: INT FK<br/>created_at: TIMESTAMP<br/>updated_at: TIMESTAMP<br/>completed_at: TIMESTAMP"]
     end
     
     subgraph "Session Management"
-        S[🔐 USER_SESSIONS<br/>session_id: VARCHAR(128) PK<br/>user_id: INT FK<br/>created_at: TIMESTAMP<br/>expires_at: TIMESTAMP<br/>ip_address: VARCHAR(45)<br/>user_agent: TEXT]
+        S["🔐 USER_SESSIONS<br/>session_id: VARCHAR(128) PK<br/>user_id: INT FK<br/>created_at: TIMESTAMP<br/>expires_at: TIMESTAMP<br/>ip_address: VARCHAR(45)<br/>user_agent: TEXT"]
     end
     
     subgraph "Audit & Compliance"
-        A[📊 AUDIT_LOGS<br/>id: INT PK<br/>user_id: INT FK<br/>action: VARCHAR(50)<br/>table_name: VARCHAR(50)<br/>record_id: INT<br/>old_values: JSON<br/>new_values: JSON<br/>created_at: TIMESTAMP<br/>ip_address: VARCHAR(45)]
+        A["📊 AUDIT_LOGS<br/>id: INT PK<br/>user_id: INT FK<br/>action: VARCHAR(50)<br/>table_name: VARCHAR(50)<br/>record_id: INT<br/>old_values: JSON<br/>new_values: JSON<br/>created_at: TIMESTAMP<br/>ip_address: VARCHAR(45)"]
     end
     
     %% Relationships
-    U -->|"1:N<br/>creates"| T
-    U -->|"1:N<br/>has"| S
-    U -->|"1:N<br/>performs"| A
-    T -->|"1:N<br/>tracked_in"| A
+    U -->|"1:N creates"| T
+    U -->|"1:N has"| S
+    U -->|"1:N performs"| A
+    T -->|"1:N tracked_in"| A
     
     %% Styling
     classDef userTable fill:#e1f5fe,stroke:#01579b,stroke-width:2px
