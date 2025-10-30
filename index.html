@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team To-Do App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            min-height: 90vh;
+            margin-top: 5vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            margin: 8px 0 0 0;
+            opacity: 0.9;
+            font-size: 16px;
+            font-weight: 300;
+        }
+        
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .login-form {
+            max-width: 450px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .login-form h2 {
+            color: #333;
+            margin-bottom: 40px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        .credentials {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .credentials strong {
+            color: #495057;
+            font-weight: 600;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            border-color: #667eea;
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .form-group input.error, .form-group select.error {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+        
+        .form-group input.error:focus, .form-group select.error:focus {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+        }
+        
+        .form-group select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            font-size: 16px;
+            background: #f8f9fa;
+            cursor: pointer;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23495057' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+            padding-right: 45px;
+            transition: none !important;
+        }
+        
+        .form-group select:disabled {
+            background: #e9ecef;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            padding: 8px 16px;
+            font-size: 14px;
+            width: auto;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            padding: 8px 16px;
+            font-size: 14px;
+            width: auto;
+        }
+        
+        .btn-danger:hover {
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            padding: 8px 16px;
+            font-size: 14px;
+            width: auto;
+        }
+        
+        .btn-success:hover {
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+        
+        .todo-actions {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            flex-shrink: 0;
+            min-width: fit-content;
+            padding-top: 4px;
+        }
+        
+        .todo-actions .btn {
+            min-width: 80px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .error-message {
+            color: #dc3545;
+            margin-top: 15px;
+            display: none;
+            background: #f8d7da;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .field-error {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            min-height: 20px;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 30px;
+            padding: 20px;
+        }
+        
+        .pagination-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .pagination-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        
+        .pagination-btn:disabled {
+            background: #e9ecef;
+            color: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .page-info {
+            font-weight: 500;
+            color: #495057;
+            font-size: 16px;
+        }
+        
+        .notification {
+            margin-top: 20px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-weight: 500;
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 30px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            color: #333;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #6c757d;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background: #f8f9fa;
+            color: #333;
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            padding: 25px 30px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .delete-warning {
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        .warning-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .delete-warning h4 {
+            color: #dc3545;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .delete-warning p {
+            margin-bottom: 10px;
+            color: #495057;
+        }
+        
+        .warning-text {
+            color: #6c757d;
+            font-style: italic;
+            font-size: 14px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid #e9ecef;
+        }
+        
+        .section h3 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+            min-width: 200px;
+        }
+        
+        .form-row .form-group:last-child {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: end;
+        }
+        
+        .form-row .form-group:last-child button {
+            height: 50px;
+            margin-top: 25px;
+            align-self: flex-start;
+        }
+        
+        .todo-item, .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 25px;
+            margin: 15px 0;
+            background: white;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            gap: 20px;
+        }
+        
+        .todo-item:hover, .user-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        
+        .todo-item.completed {
+            border-left-color: #28a745;
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        }
+        
+        .todo-text.completed {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        
+        .todo-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-right: 20px;
+        }
+        
+        .todo-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            line-height: 1.4;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+        }
+        
+        .todo-user {
+            color: #6c757d;
+            font-size: 14px;
+            background: #e9ecef;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+            align-self: flex-start;
+        }
+        
+        .user-item {
+            border-left-color: #17a2b8;
+        }
+        
+        .user-item strong {
+            color: #495057;
+            font-size: 16px;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .user-actions .btn {
+            min-width: 80px;
+            padding: 8px 16px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .user-search {
+            margin-bottom: 20px;
+            padding: 0 5px;
+        }
+        
+        .user-search .form-group {
+            margin-bottom: 0;
+        }
+        
+        .user-search input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .user-search input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+        
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .filter-group label {
+            font-weight: 500;
+            color: #495057;
+            white-space: nowrap;
+        }
+        
+        .filter-group select {
+            padding: 8px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            background: white;
+            color: #495057;
+            font-size: 14px;
+            min-width: 120px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23495057' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 14px;
+            padding-right: 35px;
+            transition: none !important;
+        }
+        
+        .filter-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .filter-btn {
+            margin: 0 8px;
+            padding: 12px 24px;
+            background: #e9ecef;
+            color: #495057;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 14px;
+        }
+        
+        .filter-btn:hover {
+            background: #dee2e6;
+            transform: translateY(-2px);
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+        
+        .empty-state h4 {
+            margin-bottom: 10px;
+            color: #495057;
+        }
+        
+        .empty-state p {
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+                min-height: calc(100vh - 20px);
+                margin-top: 0;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .form-row .form-group {
+                min-width: auto;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .logout-btn {
+                position: static;
+                margin-top: 15px;
+                display: inline-block;
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Team To-Do App</h1>
+            <p id="headerDescription">Collaborative Task Management</p>
+            <button class="logout-btn hidden" id="logoutBtn" onclick="logout()">Logout</button>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Login Section -->
+            <div id="loginSection">
+                <div class="login-form">
+                    <h2>Login</h2>
+                    
+                    <div class="credentials">
+                        <strong>Demo Credentials:</strong><br>
+                        Admin: username=admin, password=admin<br>
+                        Users: username=alice/bob/charlie, password=password123
+                    </div>
+
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn">Login</button>
+                        
+                        <div class="error-message" id="errorMessage"></div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboardSection" class="hidden">
+                <!-- Todo Management (Main Focus) -->
+                <div class="section">
+                    <h3>Todo Management</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="todoText">Todo Text:</label>
+                            <input type="text" id="todoText" placeholder="Enter todo text">
+                        </div>
+                        <div class="form-group">
+                            <label for="todoUser">User:</label>
+                            <select id="todoUser">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button onclick="addTodo()" class="btn">Add Todo</button>
+                        </div>
+                    </div>
+                    
+                    <div class="filters">
+                        <div class="filter-group">
+                            <button class="filter-btn active" onclick="filterTodos('all')">All</button>
+                            <button class="filter-btn" onclick="filterTodos('pending')">Pending</button>
+                            <button class="filter-btn" onclick="filterTodos('completed')">Completed</button>
+                        </div>
+                        <div class="filter-group" id="userFilterGroup" style="display: none;">
+                            <label for="userFilter">Filter by User:</label>
+                            <select id="userFilter" onchange="filterByUser()">
+                                <option value="">All Users</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="todosList">
+                        <!-- Todos will be loaded here -->
+                    </div>
+                    
+                    <div id="pagination" class="pagination" style="display: none;">
+                        <button id="prevBtn" class="pagination-btn" onclick="changePage(-1)">Previous</button>
+                        <span id="pageInfo" class="page-info">Page 1 of 1</span>
+                        <button id="nextBtn" class="pagination-btn" onclick="changePage(1)">Next</button>
+                    </div>
+                </div>
+
+                <!-- User Management (Admin) / Password Update (General Users) -->
+                <div id="userManagement" class="section">
+                    <h3 id="userManagementTitle">User Management</h3>
+                    
+                    <!-- Admin Section -->
+                    <div id="adminUserManagement">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="newUsername">Username:</label>
+                                <input type="text" id="newUsername" placeholder="Enter username">
+                                <div class="field-error" id="usernameError"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">Password:</label>
+                                <input type="password" id="newPassword" placeholder="Enter password">
+                                <div class="field-error" id="passwordError"></div>
+                            </div>
+                            <div class="form-group">
+                                <button onclick="createUser()" class="btn btn-secondary">Create User</button>
+                            </div>
+                        </div>
+                        
+                        <div class="user-search">
+                            <div class="form-group">
+                                <input type="text" id="userSearch" placeholder="Search users..." oninput="filterUsers()">
+                            </div>
+                        </div>
+                        
+                        <div id="usersList">
+                            <!-- Users will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <!-- General User Section -->
+                    <div id="generalUserManagement" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="currentPassword">Current Password:</label>
+                                <input type="password" id="currentPassword" placeholder="Enter current password">
+                                <div class="field-error" id="currentPasswordError"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="newPasswordUpdate">New Password:</label>
+                                <input type="password" id="newPasswordUpdate" placeholder="Enter new password">
+                                <div class="field-error" id="newPasswordUpdateError"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password:</label>
+                                <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                                <div class="field-error" id="confirmPasswordError"></div>
+                            </div>
+                            <div class="form-group">
+                                <button onclick="updatePassword()" class="btn btn-secondary">Update Password</button>
+                            </div>
+                        </div>
+                        
+                        <div id="passwordUpdateNotification" class="notification" style="display: none;">
+                            <span id="notificationText"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update User Modal -->
+    <div id="updateUserModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Update User</h3>
+                <button class="modal-close" onclick="closeUpdateUserModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="updateUsername">Username:</label>
+                    <input type="text" id="updateUsername" placeholder="Enter username">
+                    <div class="field-error" id="updateUsernameError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="updatePassword">New Password:</label>
+                    <input type="password" id="updatePassword" placeholder="Enter new password (leave empty to keep current)">
+                    <div class="field-error" id="updatePasswordError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="updateRole">Role:</label>
+                    <select id="updateRole">
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    <div class="field-error" id="updateRoleError"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeUpdateUserModal()">Cancel</button>
+                <button class="btn" onclick="updateUser()">Update User</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete User Confirmation Modal -->
+    <div id="deleteUserModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete User</h3>
+                <button class="modal-close" onclick="closeDeleteUserModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="delete-warning">
+                    <div class="warning-icon">⚠️</div>
+                    <h4>Are you sure you want to delete this user?</h4>
+                    <p><strong>Username:</strong> <span id="deleteUsername"></span></p>
+                    <p class="warning-text">This action cannot be undone. All todos created by this user will also be deleted.</p>
+                </div>
+                <div id="deleteUserError" class="field-error" style="display: none; margin-top: 15px; text-align: center;"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDeleteUserModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="confirmDeleteUser()">Delete User</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080';
+        let currentUser = null;
+        let allTodos = [];
+        let allUsers = [];
+        let filteredUsers = [];
+        let currentFilter = 'all';
+        let currentPage = 1;
+        const itemsPerPage = 10;
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            if (!username || !password) {
+                showError('Please enter both username and password');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    currentUser = data.user;
+                    showDashboard();
+                } else {
+                    const errorData = await response.json();
+                    showError(errorData.error || 'Login failed');
+                }
+            } catch (error) {
+                showError('Network error. Please try again.');
+            }
+        });
+
+        async function showDashboard() {
+            // Hide login, show dashboard
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            document.getElementById('logoutBtn').classList.remove('hidden');
+            
+            // Add fade-in animation
+            document.getElementById('dashboardSection').classList.add('fade-in');
+            
+            // Update header
+            document.querySelector('.header h1').textContent = `Welcome, ${currentUser.username}!`;
+            
+            // Show/hide sections based on role
+            if (currentUser.role === 'admin') {
+                document.getElementById('userManagement').classList.remove('hidden');
+                document.getElementById('adminUserManagement').style.display = 'block';
+                document.getElementById('generalUserManagement').style.display = 'none';
+                document.getElementById('userManagementTitle').textContent = 'User Management';
+                document.getElementById('headerDescription').textContent = 'Admin Dashboard - Manage users and todos';
+            } else {
+                document.getElementById('userManagement').classList.remove('hidden');
+                document.getElementById('adminUserManagement').style.display = 'none';
+                document.getElementById('generalUserManagement').style.display = 'block';
+                document.getElementById('userManagementTitle').textContent = 'Update Password';
+                document.getElementById('headerDescription').textContent = 'Your Todo Dashboard - Manage your tasks';
+            }
+            
+            // Load data from API
+            await loadUsers();
+            await loadTodos();
+            
+            // Setup user dropdown and filters
+            setupUserDropdown();
+            await setupUserFilter();
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+            document.getElementById('logoutBtn').classList.add('hidden');
+            document.querySelector('.header h1').textContent = 'Team To-Do App';
+            document.getElementById('headerDescription').textContent = 'Collaborative Task Management';
+            
+            // Clear form
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            // Reset filters to default state
+            currentFilter = 'all';
+            const statusFilter = document.getElementById('statusFilter');
+            if (statusFilter) {
+                statusFilter.value = 'all';
+            }
+            
+            const userFilter = document.getElementById('userFilter');
+            if (userFilter) {
+                userFilter.value = '';
+            }
+            
+            // Reset pagination
+            currentPage = 1;
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        async function loadUsers() {
+            try {
+                const response = await fetch(`${API_BASE}/admin/users`, {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    allUsers = await response.json();
+                    filteredUsers = [...allUsers]; // Initialize filtered users
+                    displayUsers();
+                } else {
+                    console.log('User management not available for this role');
+                }
+            } catch (error) {
+                console.log('User management not available: ' + error.message);
+            }
+        }
+
+        function displayUsers() {
+            const usersList = document.getElementById('usersList');
+            
+            if (filteredUsers.length === 0) {
+                usersList.innerHTML = `
+                    <div class="empty-state">
+                        <h4>No users found</h4>
+                        <p>${allUsers.length === 0 ? 'Create your first user to get started' : 'No users match your search'}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            usersList.innerHTML = filteredUsers.map(user => `
+                <div class="user-item fade-in">
+                    <div>
+                        <strong>${user.username}</strong> - ${user.role}
+                    </div>
+                    <div class="user-actions">
+                        <button class="btn btn-secondary" onclick="openUpdateUserModal(${user.id}, '${user.username}', '${user.role}')">Update</button>
+                        <button class="btn btn-danger" onclick="openDeleteUserModal(${user.id}, '${user.username}')">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Update user dropdown after loading users
+            setupUserDropdown();
+        }
+
+        function filterUsers() {
+            const searchTerm = document.getElementById('userSearch').value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                // Show all users if search is empty
+                filteredUsers = [...allUsers];
+            } else {
+                // Filter users by username or role
+                filteredUsers = allUsers.filter(user => 
+                    user.username.toLowerCase().includes(searchTerm) ||
+                    user.role.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Re-display users with filtered results
+            displayUsers();
+        }
+        
+        function setupUserDropdown() {
+            const userSelect = document.getElementById('todoUser');
+            
+            if (currentUser.role === 'admin') {
+                // Admin can select any user (including admin)
+                userSelect.innerHTML = '<option value="">Choose user...</option>' + 
+                    allUsers.map(user => `<option value="${user.username}">${user.username}</option>`).join('');
+                userSelect.disabled = false;
+            } else {
+                // Regular user can only create todos for themselves
+                userSelect.innerHTML = `<option value="${currentUser.username}" selected>${currentUser.username}</option>`;
+                userSelect.disabled = true;
+            }
+            
+            // Add event listeners to clear errors when user interacts with fields
+            userSelect.addEventListener('change', function() {
+                this.classList.remove('error');
+            });
+            
+            // Add event listener for todo text input
+            const textInput = document.getElementById('todoText');
+            textInput.addEventListener('input', function() {
+                this.classList.remove('error');
+            });
+            
+            // Add event listeners for user creation form
+            const usernameInput = document.getElementById('newUsername');
+            const passwordInput = document.getElementById('newPassword');
+            
+            if (usernameInput) {
+                usernameInput.addEventListener('input', function() {
+                    this.classList.remove('error');
+                    document.getElementById('usernameError').textContent = '';
+                });
+            }
+            if (passwordInput) {
+                passwordInput.addEventListener('input', function() {
+                    this.classList.remove('error');
+                    document.getElementById('passwordError').textContent = '';
+                });
+            }
+            
+            // Add event listeners for password update form
+            const currentPasswordInput = document.getElementById('currentPassword');
+            const newPasswordUpdateInput = document.getElementById('newPasswordUpdate');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            
+            if (currentPasswordInput) {
+                currentPasswordInput.addEventListener('input', function() {
+                    this.classList.remove('error');
+                    document.getElementById('currentPasswordError').textContent = '';
+                    // Hide notification when user starts typing
+                    document.getElementById('passwordUpdateNotification').style.display = 'none';
+                });
+            }
+            if (newPasswordUpdateInput) {
+                newPasswordUpdateInput.addEventListener('input', function() {
+                    this.classList.remove('error');
+                    document.getElementById('newPasswordUpdateError').textContent = '';
+                    // Hide notification when user starts typing
+                    document.getElementById('passwordUpdateNotification').style.display = 'none';
+                });
+            }
+            if (confirmPasswordInput) {
+                confirmPasswordInput.addEventListener('input', function() {
+                    this.classList.remove('error');
+                    document.getElementById('confirmPasswordError').textContent = '';
+                    // Hide notification when user starts typing
+                    document.getElementById('passwordUpdateNotification').style.display = 'none';
+                });
+            }
+            
+            // Add event listeners for update user modal
+            const updateUsernameInput = document.getElementById('updateUsername');
+            const updatePasswordInput = document.getElementById('updatePassword');
+            const updateRoleInput = document.getElementById('updateRole');
+            
+            if (updateUsernameInput) {
+                updateUsernameInput.addEventListener('input', function() {
+                    this.classList.remove('error');
+                    document.getElementById('updateUsernameError').textContent = '';
+                });
+            }
+            if (updatePasswordInput) {
+                updatePasswordInput.addEventListener('input', function() {
+                    this.classList.remove('error');
+                    document.getElementById('updatePasswordError').textContent = '';
+                });
+            }
+            if (updateRoleInput) {
+                updateRoleInput.addEventListener('change', function() {
+                    this.classList.remove('error');
+                    document.getElementById('updateRoleError').textContent = '';
+                });
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.getElementById('passwordUpdateNotification');
+            const notificationText = document.getElementById('notificationText');
+            
+            // Clear previous classes
+            notification.classList.remove('success', 'error');
+            
+            // Set message and type
+            notificationText.textContent = message;
+            notification.classList.add(type);
+            notification.style.display = 'block';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+
+        let currentUpdateUserId = null;
+        let currentDeleteUserId = null;
+
+        function openUpdateUserModal(userId, username, role) {
+            currentUpdateUserId = userId;
+            
+            // Populate form
+            document.getElementById('updateUsername').value = username;
+            document.getElementById('updatePassword').value = '';
+            document.getElementById('updateRole').value = role;
+            
+            // Clear errors
+            clearUpdateUserErrors();
+            
+            // Show modal
+            document.getElementById('updateUserModal').style.display = 'flex';
+        }
+
+        function closeUpdateUserModal() {
+            document.getElementById('updateUserModal').style.display = 'none';
+            currentUpdateUserId = null;
+            clearUpdateUserErrors();
+        }
+
+        function clearUpdateUserErrors() {
+            document.getElementById('updateUsernameError').textContent = '';
+            document.getElementById('updatePasswordError').textContent = '';
+            document.getElementById('updateRoleError').textContent = '';
+            document.getElementById('updateUsername').classList.remove('error');
+            document.getElementById('updatePassword').classList.remove('error');
+            document.getElementById('updateRole').classList.remove('error');
+        }
+
+        function openDeleteUserModal(userId, username) {
+            currentDeleteUserId = userId;
+            
+            // Populate username in modal
+            document.getElementById('deleteUsername').textContent = username;
+            
+            // Clear any previous error
+            clearDeleteUserError();
+            
+            // Show modal
+            document.getElementById('deleteUserModal').style.display = 'flex';
+        }
+
+        function closeDeleteUserModal() {
+            document.getElementById('deleteUserModal').style.display = 'none';
+            currentDeleteUserId = null;
+            clearDeleteUserError();
+        }
+
+        function clearDeleteUserError() {
+            const errorDiv = document.getElementById('deleteUserError');
+            errorDiv.style.display = 'none';
+            errorDiv.textContent = '';
+        }
+
+        function showDeleteUserError(message) {
+            const errorDiv = document.getElementById('deleteUserError');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        async function confirmDeleteUser() {
+            if (!currentDeleteUserId) return;
+            
+            // Clear any previous error
+            clearDeleteUserError();
+            
+            try {
+                const response = await fetch(`${API_BASE}/admin/users/${currentDeleteUserId}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    // Close modal
+                    closeDeleteUserModal();
+                    
+                    // Reload users
+                    await loadUsers();
+                    
+                    // Reload todos to remove deleted user's todos
+                    await loadTodos();
+                    
+                    // Show success notification
+                    showNotification('User deleted successfully!', 'success');
+                } else {
+                    const errorData = await response.json();
+                    // Show error inside modal instead of closing it
+                    showDeleteUserError(errorData.error || 'Failed to delete user');
+                }
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                // Show error inside modal instead of closing it
+                showDeleteUserError('Error deleting user: ' + error.message);
+            }
+        }
+
+        async function updateUser() {
+            const usernameInput = document.getElementById('updateUsername');
+            const passwordInput = document.getElementById('updatePassword');
+            const roleInput = document.getElementById('updateRole');
+            
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            const role = roleInput.value;
+            
+            // Clear previous errors
+            clearUpdateUserErrors();
+            
+            // Validate username
+            if (!username) {
+                usernameInput.classList.add('error');
+                document.getElementById('updateUsernameError').textContent = 'Username is required';
+                usernameInput.focus();
+                return;
+            }
+            
+            if (username.length > 15) {
+                usernameInput.classList.add('error');
+                document.getElementById('updateUsernameError').textContent = 'Username must be 15 characters or less';
+                usernameInput.focus();
+                return;
+            }
+            
+            if (username.includes(' ')) {
+                usernameInput.classList.add('error');
+                document.getElementById('updateUsernameError').textContent = 'Username cannot contain spaces';
+                usernameInput.focus();
+                return;
+            }
+            
+            // Check for special characters - only allow alphanumeric characters
+            if (!/^[a-zA-Z0-9]+$/.test(username)) {
+                usernameInput.classList.add('error');
+                document.getElementById('updateUsernameError').textContent = 'Username can only contain letters and numbers';
+                usernameInput.focus();
+                return;
+            }
+            
+            // Check if username already exists (excluding current user)
+            const existingUser = allUsers.find(user => user.username === username && user.id !== currentUpdateUserId);
+            if (existingUser) {
+                usernameInput.classList.add('error');
+                document.getElementById('updateUsernameError').textContent = 'Username already exists';
+                usernameInput.focus();
+                return;
+            }
+            
+            try {
+                const updateData = {
+                    username: username,
+                    role: role
+                };
+                
+                // Only include password if provided
+                if (password) {
+                    updateData.password = password;
+                }
+                
+                const response = await fetch(`${API_BASE}/admin/users/${currentUpdateUserId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(updateData)
+                });
+                
+                if (response.ok) {
+                    // Close modal
+                    closeUpdateUserModal();
+                    
+                    // Reload users
+                    await loadUsers();
+                    
+                    // Show success notification
+                    showNotification('User updated successfully!', 'success');
+                } else {
+                    const errorData = await response.json();
+                    usernameInput.classList.add('error');
+                    document.getElementById('updateUsernameError').textContent = errorData.error || 'Failed to update user';
+                    usernameInput.focus();
+                }
+            } catch (error) {
+                console.error('Error updating user:', error);
+                usernameInput.classList.add('error');
+                document.getElementById('updateUsernameError').textContent = 'Failed to update user';
+                usernameInput.focus();
+            }
+        }
+
+        async function updatePassword() {
+            const currentPasswordInput = document.getElementById('currentPassword');
+            const newPasswordInput = document.getElementById('newPasswordUpdate');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const currentPassword = currentPasswordInput.value.trim();
+            const newPassword = newPasswordInput.value.trim();
+            const confirmPassword = confirmPasswordInput.value.trim();
+            
+            // Clear previous errors
+            currentPasswordInput.classList.remove('error');
+            newPasswordInput.classList.remove('error');
+            confirmPasswordInput.classList.remove('error');
+            document.getElementById('currentPasswordError').textContent = '';
+            document.getElementById('newPasswordUpdateError').textContent = '';
+            document.getElementById('confirmPasswordError').textContent = '';
+            
+            let hasError = false;
+            
+            if (!currentPassword) {
+                currentPasswordInput.classList.add('error');
+                document.getElementById('currentPasswordError').textContent = 'Current password is required';
+                hasError = true;
+            }
+            if (!newPassword) {
+                newPasswordInput.classList.add('error');
+                document.getElementById('newPasswordUpdateError').textContent = 'New password is required';
+                hasError = true;
+            }
+            if (!confirmPassword) {
+                confirmPasswordInput.classList.add('error');
+                document.getElementById('confirmPasswordError').textContent = 'Confirm password is required';
+                hasError = true;
+            }
+            if (newPassword && confirmPassword && newPassword !== confirmPassword) {
+                confirmPasswordInput.classList.add('error');
+                document.getElementById('confirmPasswordError').textContent = 'Passwords do not match';
+                hasError = true;
+            }
+            
+            if (hasError) {
+                // Focus on the first error field
+                if (!currentPassword) {
+                    currentPasswordInput.focus();
+                } else if (!newPassword) {
+                    newPasswordInput.focus();
+                } else if (!confirmPassword) {
+                    confirmPasswordInput.focus();
+                } else if (newPassword !== confirmPassword) {
+                    confirmPasswordInput.focus();
+                }
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/update-password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        currentPassword, 
+                        newPassword 
+                    }),
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    // Clear form
+                    currentPasswordInput.value = '';
+                    newPasswordInput.value = '';
+                    confirmPasswordInput.value = '';
+                    // Show success notification
+                    showNotification('Password updated successfully!', 'success');
+                } else {
+                    const errorData = await response.json();
+                    currentPasswordInput.classList.add('error');
+                    document.getElementById('currentPasswordError').textContent = errorData.error || 'Failed to update password';
+                    currentPasswordInput.focus();
+                }
+            } catch (error) {
+                currentPasswordInput.classList.add('error');
+                document.getElementById('currentPasswordError').textContent = 'Error updating password: ' + error.message;
+                currentPasswordInput.focus();
+            }
+        }
+
+        async function createUser() {
+            const usernameInput = document.getElementById('newUsername');
+            const passwordInput = document.getElementById('newPassword');
+            const usernameError = document.getElementById('usernameError');
+            const passwordError = document.getElementById('passwordError');
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            // Clear previous errors
+            usernameInput.classList.remove('error');
+            passwordInput.classList.remove('error');
+            usernameError.textContent = '';
+            passwordError.textContent = '';
+            
+            let hasError = false;
+            
+            if (!username) {
+                usernameInput.classList.add('error');
+                usernameError.textContent = 'Username is required';
+                hasError = true;
+            }
+            if (!password) {
+                passwordInput.classList.add('error');
+                passwordError.textContent = 'Password is required';
+                hasError = true;
+            }
+            
+            // Frontend validation
+            if (username && username.length > 15) {
+                usernameInput.classList.add('error');
+                usernameError.textContent = 'Username must be 15 characters or less';
+                hasError = true;
+            }
+            if (username && username.includes(' ')) {
+                usernameInput.classList.add('error');
+                usernameError.textContent = 'Username cannot contain spaces';
+                hasError = true;
+            }
+            // Check for special characters - only allow alphanumeric characters
+            if (username && !/^[a-zA-Z0-9]+$/.test(username)) {
+                usernameInput.classList.add('error');
+                usernameError.textContent = 'Username can only contain letters and numbers';
+                hasError = true;
+            }
+            
+            if (hasError) {
+                // Focus on the first error field
+                if (!username) {
+                    usernameInput.focus();
+                } else if (!password) {
+                    passwordInput.focus();
+                } else if (username.length > 15 || username.includes(' ')) {
+                    usernameInput.focus();
+                }
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/admin/users`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    loadUsers();
+                    // Refresh user filter dropdown
+                    await setupUserFilter();
+                    // Clear form
+                    usernameInput.value = '';
+                    passwordInput.value = '';
+                    // Clear search
+                    document.getElementById('userSearch').value = '';
+                } else {
+                    const errorData = await response.json();
+                    // Show server error in username field
+                    usernameInput.classList.add('error');
+                    usernameError.textContent = errorData.error || 'Failed to create user';
+                    usernameInput.focus();
+                }
+            } catch (error) {
+                usernameInput.classList.add('error');
+                usernameError.textContent = 'Error creating user: ' + error.message;
+                usernameInput.focus();
+            }
+        }
+
+        async function loadTodos() {
+            try {
+                const response = await fetch(`${API_BASE}/todos`, {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    allTodos = await response.json();
+                    displayTodos();
+                } else {
+                    console.log('Failed to load todos');
+                }
+            } catch (error) {
+                console.log('Error loading todos: ' + error.message);
+            }
+        }
+
+        function displayTodos() {
+            let filteredTodos = allTodos;
+            
+            // Apply status filter
+            if (currentFilter === 'pending') {
+                filteredTodos = allTodos.filter(todo => !todo.completed);
+            } else if (currentFilter === 'completed') {
+                filteredTodos = allTodos.filter(todo => todo.completed);
+            } else {
+                // For 'all' filter, sort by created date (newest first) then completed status
+                filteredTodos = [...allTodos].sort((a, b) => {
+                    // First sort by created date (newest first)
+                    const dateA = new Date(a.created_at);
+                    const dateB = new Date(b.created_at);
+                    if (dateA > dateB) return -1;
+                    if (dateA < dateB) return 1;
+                    
+                    // If same date, put completed todos at bottom
+                    if (a.completed && !b.completed) return 1;
+                    if (!a.completed && b.completed) return -1;
+                    return 0;
+                });
+            }
+            
+            // Apply user filter (both admin and general users)
+            const userFilter = document.getElementById('userFilter');
+            if (userFilter && userFilter.value) {
+                filteredTodos = filteredTodos.filter(todo => todo.user === userFilter.value);
+            }
+            
+            const todosList = document.getElementById('todosList');
+            const pagination = document.getElementById('pagination');
+            
+            if (filteredTodos.length === 0) {
+                todosList.innerHTML = `
+                    <div class="empty-state">
+                        <h4>No todos found</h4>
+                        <p>${currentFilter === 'all' ? 'Add your first todo to get started' : `No ${currentFilter} todos found`}</p>
+                    </div>
+                `;
+                pagination.style.display = 'none';
+                return;
+            }
+            
+            // Calculate pagination
+            const totalPages = Math.ceil(filteredTodos.length / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedTodos = filteredTodos.slice(startIndex, endIndex);
+            
+            // Show/hide pagination
+            if (filteredTodos.length > itemsPerPage) {
+                pagination.style.display = 'flex';
+                updatePaginationControls(totalPages);
+            } else {
+                pagination.style.display = 'none';
+            }
+            
+            todosList.innerHTML = paginatedTodos.map(todo => `
+                <div class="todo-item ${todo.completed ? 'completed' : ''} fade-in">
+                    <div class="todo-content">
+                        <div class="todo-text ${todo.completed ? 'completed' : ''}">${todo.text}</div>
+                        <span class="todo-user">${todo.user}</span>
+                    </div>
+                    <div class="todo-actions">
+                        ${!todo.completed && (currentUser.role === 'admin' || todo.user === currentUser.username) ? `<button class="btn btn-success" onclick="completeTodo(${todo.id})">Complete</button>` : ''}
+                        ${currentUser.role === 'admin' ? `<button class="btn btn-danger" onclick="deleteTodo(${todo.id})">Delete</button>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function addTodo() {
+            const textInput = document.getElementById('todoText');
+            const userSelect = document.getElementById('todoUser');
+            const text = textInput.value.trim();
+            const user = userSelect.value;
+            
+            // Clear previous errors
+            textInput.classList.remove('error');
+            userSelect.classList.remove('error');
+            
+            let hasError = false;
+            
+            if (!text) {
+                textInput.classList.add('error');
+                hasError = true;
+            }
+            
+            if (!user) {
+                userSelect.classList.add('error');
+                hasError = true;
+            }
+            
+            if (hasError) {
+                // Focus on the first error field
+                if (!text) {
+                    textInput.focus();
+                } else if (!user) {
+                    userSelect.focus();
+                }
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/todos`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text, user }),
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    loadTodos();
+                    // Clear form
+                    document.getElementById('todoText').value = '';
+                    document.getElementById('todoUser').value = '';
+                    // Refresh user dropdown
+                    setupUserDropdown();
+                } else {
+                    alert('Failed to add todo');
+                }
+            } catch (error) {
+                alert('Error adding todo: ' + error.message);
+            }
+        }
+
+        async function completeTodo(id) {
+            try {
+                const response = await fetch(`${API_BASE}/todos/${id}/complete`, {
+                    method: 'PUT',
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    loadTodos();
+                } else {
+                    alert('Failed to complete todo');
+                }
+            } catch (error) {
+                alert('Error completing todo: ' + error.message);
+            }
+        }
+
+        async function deleteTodo(id) {
+            try {
+                const response = await fetch(`${API_BASE}/todos/${id}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    loadTodos();
+                } else {
+                    alert('Failed to delete todo');
+                }
+            } catch (error) {
+                alert('Error deleting todo: ' + error.message);
+            }
+        }
+
+        function filterTodos(filter) {
+            currentFilter = filter;
+            currentPage = 1; // Reset to first page when filtering
+            
+            // Update filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            displayTodos();
+        }
+        
+        function changePage(direction) {
+            const totalPages = Math.ceil(getFilteredTodos().length / itemsPerPage);
+            const newPage = currentPage + direction;
+            
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                displayTodos();
+                // Scroll to top of filters section with padding
+                const filtersElement = document.querySelector('.filters');
+                const filtersRect = filtersElement.getBoundingClientRect();
+                const scrollTop = window.pageYOffset + filtersRect.top - 50; // 50px padding above
+                window.scrollTo({
+                    top: scrollTop,
+                    behavior: 'smooth'
+                });
+            }
+        }
+        
+        function updatePaginationControls(totalPages) {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const pageInfo = document.getElementById('pageInfo');
+            
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages;
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+        }
+        
+        function getFilteredTodos() {
+            let filteredTodos = allTodos;
+            
+            // Apply status filter
+            if (currentFilter === 'pending') {
+                filteredTodos = allTodos.filter(todo => !todo.completed);
+            } else if (currentFilter === 'completed') {
+                filteredTodos = allTodos.filter(todo => todo.completed);
+            } else {
+                // For 'all' filter, sort by created date (newest first) then completed status
+                filteredTodos = [...allTodos].sort((a, b) => {
+                    // First sort by created date (newest first)
+                    const dateA = new Date(a.created_at);
+                    const dateB = new Date(b.created_at);
+                    if (dateA > dateB) return -1;
+                    if (dateA < dateB) return 1;
+                    
+                    // If same date, put completed todos at bottom
+                    if (a.completed && !b.completed) return 1;
+                    if (!a.completed && b.completed) return -1;
+                    return 0;
+                });
+            }
+            
+            // Apply user filter
+            const userFilter = document.getElementById('userFilter');
+            if (userFilter && userFilter.value) {
+                filteredTodos = filteredTodos.filter(todo => todo.user === userFilter.value);
+            }
+            
+            return filteredTodos;
+        }
+        
+        function filterByUser() {
+            currentPage = 1; // Reset to first page when user filter changes
+            displayTodos();
+        }
+        
+        async function setupUserFilter() {
+            const userFilterGroup = document.getElementById('userFilterGroup');
+            const userFilter = document.getElementById('userFilter');
+            
+            // Show user filter for both admin and general users
+            userFilterGroup.style.display = 'flex';
+            
+            try {
+                // Get all users from API instead of just from todos
+                const response = await fetch(`${API_BASE}/admin/users`, {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const users = await response.json();
+                    const usernames = users.map(user => user.username);
+                    
+                    // Both admin and general users see "Mine" as first option
+                    const otherUsers = usernames.filter(user => user !== currentUser.username);
+                    userFilter.innerHTML = '<option value="">All Users</option>' + 
+                        `<option value="${currentUser.username}">Mine</option>` +
+                        otherUsers.map(user => `<option value="${user}">${user}</option>`).join('');
+                } else {
+                    // Fallback to todos-based users if API fails
+                    const uniqueUsers = [...new Set(allTodos.map(todo => todo.user))];
+                    const otherUsers = uniqueUsers.filter(user => user !== currentUser.username);
+                    userFilter.innerHTML = '<option value="">All Users</option>' + 
+                        `<option value="${currentUser.username}">Mine</option>` +
+                        otherUsers.map(user => `<option value="${user}">${user}</option>`).join('');
+                }
+            } catch (error) {
+                // Fallback to todos-based users if API fails
+                const uniqueUsers = [...new Set(allTodos.map(todo => todo.user))];
+                const otherUsers = uniqueUsers.filter(user => user !== currentUser.username);
+                userFilter.innerHTML = '<option value="">All Users</option>' + 
+                    `<option value="${currentUser.username}">Mine</option>` +
+                    otherUsers.map(user => `<option value="${user}">${user}</option>`).join('');
+            }
+        }
+    </script>
+</body>
+</html>
